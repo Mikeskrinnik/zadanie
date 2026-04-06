@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тестовое задание — KIT Platform v2</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f4f4f4;
+      color: #1a1a1a;
+      line-height: 1.65;
+      padding: 40px 20px;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    /* Header */
+    .page-header {
+      margin-bottom: 40px;
+    }
+    .page-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+    .page-header p { font-size: 14px; color: #888; }
+
+    /* Case */
+    .case {
+      background: #fff;
+      border-radius: 14px;
+      padding: 36px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    }
+
+    .case-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .case-num {
+      background: #111;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .case-title { font-size: 20px; font-weight: 700; }
+
+    .case-problem {
+      font-size: 14px;
+      color: #555;
+      background: #f8f8f8;
+      border-left: 3px solid #ccc;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 16px 0 30px;
+    }
+
+    /* Q block */
+    .q-block { margin-bottom: 32px; }
+
+    .q-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
+    .q-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    hr.divider { border: none; border-top: 1px solid #eee; margin: 28px 0; }
+
+    /* Clarifying questions */
+    .clarify-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+
+    .clarify-box .heading {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #b45309;
+      margin-bottom: 10px;
+    }
+
+    .clarify-box ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .clarify-box ul li {
+      font-size: 13px;
+      color: #555;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .clarify-box ul li::before {
+      content: '?';
+      position: absolute;
+      left: 0;
+      color: #f59e0b;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* Root cause */
+    .decomp {
+      margin-bottom: 20px;
+    }
+
+    .decomp-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .decomp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 600px) { .decomp-grid { grid-template-columns: 1fr; } }
+
+    .decomp-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 14px 16px;
+      border: 1px solid #eee;
+    }
+
+    .decomp-card strong { display: block; font-size: 13px; margin-bottom: 4px; }
+    .decomp-card span { font-size: 12px; color: #777; }
+
+    /* Benchmark */
+    .benchmark {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .benchmark .bhead {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #0369a1;
+      margin-bottom: 10px;
+    }
+
+    .bench-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+    }
+
+    .bench-item {
+      background: #fff;
+      border: 1px solid #e0f2fe;
+      border-radius: 6px;
+      padding: 8px 12px;
+    }
+
+    .bench-item .brand { font-size: 12px; font-weight: 700; color: #0369a1; }
+    .bench-item .value { font-size: 14px; font-weight: 700; color: #111; margin: 2px 0; }
+    .bench-item .note { font-size: 11px; color: #888; }
+
+    /* Opportunity */
+    .opportunity {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .opportunity .ohead {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #15803d;
+      margin-bottom: 8px;
+    }
+
+    .opportunity p { color: #333; line-height: 1.6; }
+    .opportunity strong { color: #15803d; }
+
+    /* Initiatives */
+    .initiatives { display: grid; gap: 10px; margin-top: 8px; }
+
+    .init-card {
+      border-radius: 10px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid #eee;
+      background: #fafafa;
+    }
+
+    .init-card.tier1 { border-left: 4px solid #22c55e; background: #f0fdf4; }
+    .init-card.tier2 { border-left: 4px solid #f59e0b; background: #fffbeb; }
+    .init-card.tier3 { border-left: 4px solid #94a3b8; }
+
+    .init-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .tier1 .init-num { background: #22c55e; }
+    .tier2 .init-num { background: #f59e0b; }
+    .tier3 .init-num { background: #94a3b8; }
+
+    .init-body strong { display: block; font-size: 14px; margin-bottom: 4px; }
+    .init-body p { font-size: 13px; color: #555; line-height: 1.5; }
+    .init-body .why { font-size: 12px; color: #888; margin-top: 4px; font-style: italic; }
+
+    .ice-score {
+      flex-shrink: 0;
+      text-align: center;
+      min-width: 52px;
+    }
+
+    .ice-score .score-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111;
+      line-height: 1;
+    }
+
+    .ice-score .score-label {
+      font-size: 10px;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Priority table */
+    .ptable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .ptable th {
+      background: #f0f0f0;
+      padding: 9px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #555;
+      border-bottom: 2px solid #ddd;
+      font-size: 12px;
+    }
+
+    .ptable td { padding: 10px 12px; border-bottom: 1px solid #eee; vertical-align: top; font-size: 13px; }
+    .ptable tr:last-child td { border-bottom: none; }
+    .ptable tr:hover td { background: #f9f9f9; }
+
+    .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 12px; }
+    .badge.h { background: #dcfce7; color: #16a34a; }
+    .badge.m { background: #fef9c3; color: #a16207; }
+    .badge.l { background: #f1f5f9; color: #64748b; }
+
+    /* Metrics */
+    .metrics-grid { display: grid; gap: 8px; margin-top: 8px; }
+
+    .metric-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 12px 14px;
+      border: 1px solid #eee;
+    }
+
+    .metric-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+
+    .metric-body strong { font-size: 13px; display: block; margin-bottom: 2px; }
+    .metric-body span { font-size: 12px; color: #777; }
+
+    /* Test blocks */
+    .test-card {
+      background: #f8f8ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+
+    .test-card .thead {
+      font-size: 15px;
+      font-weight: 700;
+      color: #3730a3;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .test-card .trow {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 6px 12px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .test-card .trow .tkey {
+      font-weight: 600;
+      color: #6366f1;
+      font-size: 12px;
+      padding-top: 2px;
+    }
+
+    .test-card .trow .tval { color: #333; }
+
+    .test-card .risk-box {
+      margin-top: 12px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #9a3412;
+    }
+
+    /* Observations */
+    .obs-box {
+      background: #fdf4ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+
+    .obs-box .obs-head {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7e22ce;
+      margin-bottom: 12px;
+    }
+
+    .obs-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .obs-item:last-child { margin-bottom: 0; }
+
+    .obs-item .obs-tag {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      height: fit-content;
+      margin-top: 1px;
+    }
+
+    .obs-tag.good { background: #dcfce7; color: #16a34a; }
+    .obs-tag.bad { background: #fee2e2; color: #dc2626; }
+    .obs-tag.neutral { background: #f1f5f9; color: #64748b; }
+
+    .obs-item .obs-text { color: #444; line-height: 1.5; }
+
+    /* Quant block */
+    .quant-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) { .quant-grid { grid-template-columns: 1fr; } }
+
+    .quant-card {
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .quant-card .qval { font-size: 28px; font-weight: 800; color: #111; line-height: 1; }
+    .quant-card .qsub { font-size: 12px; color: #888; margin-top: 4px; }
+    .quant-card .qdesc { font-size: 12px; color: #555; margin-top: 6px; }
+    .quant-card.accent .qval { color: #16a34a; }
+
+    /* ══ MOCKUP STYLES ══ */
+
+    .mock-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .mock-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) { .mock-compare { grid-template-columns: 1fr; } }
+
+    .mock-col { display: flex; flex-direction: column; align-items: center; }
+
+    .mock-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .mock-label.before { background: #fee2e2; color: #dc2626; }
+    .mock-label.after  { background: #dcfce7; color: #16a34a; }
+
+    /* Phone frame */
+    .phone-frame {
+      width: 100%;
+      max-width: 280px;
+      background: #1a1a1a;
+      border-radius: 36px;
+      padding: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    .phone-frame.good { background: #111; }
+
+    .phone-screen {
+      background: #fff;
+      border-radius: 26px;
+      padding: 16px 14px 20px;
+      overflow: hidden;
+    }
+
+    /* Phone notch */
+    .phone-frame::before {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      margin: 0 auto 8px;
+    }
+
+    /* Mobile UI components */
+    .m-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+      margin-bottom: 8px;
+    }
+
+    .m-header.minimal { justify-content: center; }
+
+    .m-logo {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #111;
+    }
+
+    .m-nav-links {
+      display: flex;
+      gap: 6px;
+    }
+
+    .m-nav-links span {
+      font-size: 7px;
+      color: #999;
+    }
+
+    .m-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #111;
+    }
+
+    .m-field-label {
+      font-size: 9px;
+      font-weight: 600;
+      color: #888;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .m-field {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 7px 8px;
+      font-size: 10px;
+      color: #aaa;
+      min-height: 28px;
+    }
+
+    .m-field-group { display: flex; flex-direction: column; }
+
+    .m-btn-primary {
+      background: #111;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .m-btn-outline {
+      border: 1px solid #111;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .m-btn-sm {
+      background: #111;
+      color: #fff;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Issue/Good flags */
+    .m-issue-flag {
+      font-size: 8px;
+      font-weight: 700;
+      color: #dc2626;
+      background: #fee2e2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .m-good-flag {
+      font-size: 8px;
+      font-weight: 700;
+      color: #16a34a;
+      background: #dcfce7;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .m-issue-block {
+      background: #fff5f5;
+      border: 1px dashed #fca5a5;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
+    .m-good-block {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
+    /* Radio rows */
+    .m-radio-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid #eee;
+      border-radius: 7px;
+      margin-bottom: 4px;
+      background: #fff;
+    }
+
+    .m-radio-row.selected { border-color: #111; background: #f9f9f9; }
+    .m-radio-row.selected.good-border { border-color: #22c55e; background: #f0fdf4; }
+
+    .m-radio-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #111;
+      flex-shrink: 0;
+      border: 2px solid #111;
+    }
+
+    .m-radio-dot.empty { background: #fff; border-color: #ccc; }
+    .m-radio-dot.green { background: #22c55e; border-color: #22c55e; }
+
+    /* Progress bar */
+    .m-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 4px;
+      margin-top: 6px;
+    }
+
+    .m-progress-step {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      color: #9ca3af;
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .m-progress-step.done { background: #22c55e; color: #fff; }
+    .m-progress-step.active { background: #111; color: #fff; }
+
+    .m-progress-line {
+      height: 2px;
+      width: 28px;
+      background: #e5e7eb;
+    }
+
+    .m-progress-line.done { background: #22c55e; }
+
+    .m-progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 8px;
+      color: #aaa;
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+
+    /* Total box */
+    .m-total-box {
+      background: #fff;
+      border-radius: 6px;
+      padding: 6px 8px;
+      margin-top: 4px;
+    }
+
+    .m-total-row { font-size: 11px; font-weight: 700; color: #aaa; padding: 4px 0; }
+    .m-total-row-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #555;
+      margin-bottom: 2px;
+    }
+
+    /* Trust row */
+    .m-trust-row {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 8px;
+      padding: 6px 0;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .m-trust-item {
+      text-align: center;
+      font-size: 8px;
+      color: #777;
+      line-height: 1.4;
+    }
+
+    /* Payment icons */
+    .m-pay-icon {
+      font-size: 7px;
+      font-weight: 700;
+      background: #f0f0f0;
+      border-radius: 3px;
+      padding: 1px 4px;
+      color: #555;
+    }
+
+    /* Changes grid */
+    .changes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 640px) { .changes-grid { grid-template-columns: 1fr; } }
+
+    .change-card {
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .change-card.remove { background: #fff5f5; border: 1px solid #fecaca; }
+    .change-card.add    { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .change-card.impact { background: #eff6ff; border: 1px solid #bfdbfe; }
+
+    .change-icon {
+      font-size: 18px;
+      font-weight: 900;
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .change-card.remove .change-icon { background: #fee2e2; color: #dc2626; }
+    .change-card.add    .change-icon { background: #dcfce7; color: #16a34a; }
+    .change-card.impact .change-icon { background: #dbeafe; color: #2563eb; }
+
+    .change-body strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .change-body ul {
+      list-style: none;
+      display: grid;
+      gap: 4px;
+    }
+
+    .change-body ul li {
+      font-size: 12px;
+      color: #444;
+      padding-left: 12px;
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .change-card.remove .change-body ul li::before { content: '×'; position:absolute; left:0; color:#dc2626; font-weight:700; }
+    .change-card.add    .change-body ul li::before { content:'✓'; position:absolute; left:0; color:#16a34a; font-weight:700; }
+    .change-card.impact .change-body ul li::before { content:'→'; position:absolute; left:0; color:#2563eb; font-weight:700; }
+
+    /* ══ DESKTOP MOCKUP STYLES ══ */
+
+    .desktop-frame {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      border: 1px solid #e0e0e0;
+      margin-bottom: 12px;
+    }
+
+    .bad-frame  { border-color: #fca5a5; }
+    .good-frame { border-color: #86efac; }
+
+    .db-browser-bar {
+      background: #f0f0f0;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .db-dots { display: flex; gap: 5px; }
+    .db-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+      display: block;
+    }
+
+    .db-url {
+      flex: 1;
+      background: #fff;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+    }
+
+    .db-screen { background: #fff; }
+
+    /* Header */
+    .db-header {
+      display: flex;
+      align-items: center;
+      padding: 10px 24px;
+      border-bottom: 1px solid #eee;
+      gap: 16px;
+    }
+
+    .bad-header  { background: #fff; }
+    .good-header { background: #fff; }
+
+    .db-logo {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #111;
+      flex-shrink: 0;
+    }
+
+    .db-nav {
+      display: flex;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .db-nav span {
+      font-size: 10px;
+      color: #555;
+      white-space: nowrap;
+    }
+
+    .db-header-icons { display: flex; gap: 10px; font-size: 13px; }
+
+    /* Progress bar in header */
+    .db-progress-bar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .db-pb-step {
+      font-size: 11px;
+      font-weight: 600;
+      color: #aaa;
+      padding: 4px 10px;
+      border-radius: 14px;
+    }
+
+    .db-pb-step.active {
+      background: #111;
+      color: #fff;
+    }
+
+    .db-pb-step.done {
+      color: #22c55e;
+      font-weight: 700;
+    }
+
+    .db-pb-arrow { color: #ccc; font-size: 14px; }
+
+    /* Issue/good tags */
+    .db-issue-tag {
+      display: inline-block;
+      font-size: 8px;
+      font-weight: 700;
+      color: #dc2626;
+      background: #fee2e2;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-bottom: 2px;
+    }
+
+    .db-good-tag {
+      display: inline-block;
+      font-size: 8px;
+      font-weight: 700;
+      color: #16a34a;
+      background: #dcfce7;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-bottom: 2px;
+    }
+
+    /* Body layout */
+    .db-body {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 0;
+      min-height: 400px;
+    }
+
+    .db-left {
+      padding: 20px 24px;
+      border-right: 1px solid #eee;
+    }
+
+    .db-right {
+      padding: 20px 18px;
+      background: #fafafa;
+    }
+
+    .db-right.good-right { background: #f9fafb; }
+
+    .db-step-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 14px;
+    }
+
+    .db-block-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+
+    /* Blocks */
+    .db-block {
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .bad-block  { background: #fff5f5; border: 1px dashed #fca5a5; }
+    .good-block { background: #f0fdf4; border: 1px solid #bbf7d0; }
+
+    /* Fields */
+    .db-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 3px;
+    }
+
+    .db-field {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 10px;
+      color: #bbb;
+      min-height: 30px;
+    }
+
+    .db-field-val { font-size: 11px; font-weight: 600; color: #222; }
+
+    .db-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Radio */
+    .db-radio {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .db-radio-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .db-radio-dot.filled { border-color: #111; background: #111; }
+    .db-radio-dot.green  { border-color: #22c55e; background: #22c55e; }
+
+    /* Buttons */
+    .db-btn-sm {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .bad-btn { background: #f0f0f0; color: #555; border: 1px solid #ddd; }
+
+    .db-btn-primary {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .bad-btn-primary  { background: #ccc; color: #888; }
+    .good-btn-primary { background: #111; color: #fff; }
+
+    /* Trust strip */
+    .db-trust-strip {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .db-trust-item {
+      font-size: 9px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Payment tabs */
+    .db-pay-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .db-pay-tab {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid #e0e0e0;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .db-pay-tab.active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    /* Order summary */
+    .db-order-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .db-order-thumb {
+      width: 44px; height: 54px;
+      border-radius: 6px;
+      background: #e8e8e8;
+      flex-shrink: 0;
+    }
+
+    .good-thumb { background: linear-gradient(135deg, #d4d4d4, #a8a8a8); }
+
+    .db-total-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .db-total-line.bold {
+      font-size: 13px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .db-divider { height: 1px; background: #eee; margin: 8px 0; }
+
+    /* Footer note */
+    .footnote {
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+      margin-top: 32px;
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<nav style="position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(6px);border-bottom:1px solid #eee;padding:10px 20px;display:flex;gap:20px;justify-content:center;font-size:13px;">
+  <a href="#case01" style="color:#555;text-decoration:none;font-weight:600;">Кейс 01 · Доставка</a>
+  <span style="color:#ddd">|</span>
+  <a href="#case02" style="color:#555;text-decoration:none;font-weight:600;">Кейс 02 · Checkout</a>
+  <span style="color:#ddd">|</span>
+  <a href="#mockups" style="color:#555;text-decoration:none;font-weight:600;">Макеты</a>
+</nav>
+<div class="container">
+
+  <div class="page-header">
+    <h1>Тестовое задание — KIT Platform</h1>
+    <p>Версия 2 · апрель 2026</p>
+  </div>
+
+  <!-- ══════════════════════════ КЕЙС 01 ══════════════════════════ -->
+  <div class="case" id="case01">
+    <div class="case-header">
+      <span class="case-num">КЕЙС 01</span>
+      <span class="case-title">Время доставки: 6 → 2 дня</span>
+    </div>
+
+    <div class="case-problem">
+      KIT позволяет продавцам подключать Яндекс.Доставку и СДЭК одним кликом.
+      Проблема: среднее время доставки — <strong>6 дней</strong>, покупатели уходят к конкурентам.
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-block">
+      <div class="q-label">Вопрос 01</div>
+      <div class="q-text">Какие инициативы ты бы предложил, чтобы уменьшить среднее время доставки с 6 до 2 дней?</div>
+
+      <!-- Clarifying questions -->
+      <div class="clarify-box">
+        <div class="heading">Уточняющие вопросы, которые я задам перед ответом</div>
+        <ul>
+          <li>6 дней — это медиана или среднее? Какой P90? Важно понять, есть ли выбросы.</li>
+          <li>Из чего складываются 6 дней: время обработки у продавца vs. транзитное время перевозчика?</li>
+          <li>В каких регионах сроки хуже всего? Есть ли «провальные» маршруты?</li>
+          <li>Какой % продавцов передаёт заказы курьеру за 4 / 8 / 24 / 48+ часов?</li>
+          <li>Что сейчас отображается покупателю: точная дата доставки или диапазон «3–7 дней»?</li>
+        </ul>
+      </div>
+
+      <!-- Root cause -->
+      <div class="decomp">
+        <div class="decomp-title">Декомпозиция проблемы: откуда берутся 6 дней</div>
+        <div class="decomp-grid">
+          <div class="decomp-card">
+            <strong>⏱ Обработка у продавца (блок 1)</strong>
+            <span>Продавец упаковал и передал товар курьеру. Часто занимает 1–3 дня — нет стандарта, нет триггеров.</span>
+          </div>
+          <div class="decomp-card">
+            <strong>🚚 Транзит перевозчика (блок 2)</strong>
+            <span>Время от забора до двери/ПВЗ покупателя. Зависит от региона, маршрута, загрузки сортировочных центров.</span>
+          </div>
+          <div class="decomp-card">
+            <strong>📦 Хранение на ПВЗ (блок 3)</strong>
+            <span>Посылка лежит на выдаче, покупатель не забирает. Формально в «сроке доставки» — но на опыт влияет.</span>
+          </div>
+          <div class="decomp-card">
+            <strong>🗺 Несовпадение зон покрытия (блок 4)</strong>
+            <span>Для ряда регионов Яндекс и СДЭК идут через сортировку в Москве — лишние 2–3 дня.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benchmark -->
+      <div class="benchmark">
+        <div class="bhead">Бенчмарк: что предлагают конкуренты</div>
+        <div class="bench-grid">
+          <div class="bench-item">
+            <div class="brand">Wildberries</div>
+            <div class="value">1–2 дня</div>
+            <div class="note">FBO, собственная сеть</div>
+          </div>
+          <div class="bench-item">
+            <div class="brand">Ozon</div>
+            <div class="value">1–3 дня</div>
+            <div class="note">FBO, 1 день в Москве</div>
+          </div>
+          <div class="bench-item">
+            <div class="brand">Яндекс Маркет</div>
+            <div class="value">1–2 дня</div>
+            <div class="note">FBY, экспресс в городах</div>
+          </div>
+          <div class="bench-item">
+            <div class="brand">KIT (текущий)</div>
+            <div class="value">6 дней</div>
+            <div class="note">FBS, среднее значение</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:#888;margin-top:10px;">→ Разрыв критичный: маркетплейсы уже приучили покупателей к доставке за 1–2 дня. 6 дней воспринимается как аномалия.</p>
+      </div>
+
+      <!-- Initiatives -->
+      <p style="font-size:13px;color:#555;margin-bottom:12px;">Инициативы разбиты по блокам из декомпозиции. ICE = Impact × Confidence × Ease. Максимум 1000.</p>
+
+      <div class="initiatives">
+
+        <div class="init-card tier1">
+          <div class="init-num">1</div>
+          <div class="init-body">
+            <strong>SLA для продавцов: передача курьеру ≤ 4 ч после заказа</strong>
+            <p>Ввести стандарт обработки, отображать статус в ЛК. Продавцы с систематическими нарушениями — автоматическое предупреждение и понижение в поиске. Быстрые — бейдж «Быстрая отгрузка» на карточке.</p>
+            <p class="why">Блок 1. По опыту FBS-платформ, время обработки продавца — главный виновник задержек. Легко реализовать инструментами платформы.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">72</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier1">
+          <div class="init-num">2</div>
+          <div class="init-body">
+            <strong>Показывать точную дату доставки вместо диапазона</strong>
+            <p>«Доставим 10 апреля» вместо «3–7 рабочих дней». На основе геолокации покупателя и данных о перевозчиках. Создаёт ответственность для платформы и мотивирует продавцов соблюдать SLA.</p>
+            <p class="why">Блок 1+2. Amazon показал: точная дата повышает конверсию и снижает процент жалоб.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">63</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier1">
+          <div class="init-num">3</div>
+          <div class="init-body">
+            <strong>Умная маршрутизация: выбор перевозчика по скорости для каждого маршрута</strong>
+            <p>Для каждой пары «город продавца → город покупателя» — автоматически выбирать перевозчика с лучшим историческим SLA. Предлагать покупателю опции, отсортированные по скорости, а не цене.</p>
+            <p class="why">Блок 2. Разные перевозчики лучше справляются на разных маршрутах — сейчас это не используется.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">56</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier2">
+          <div class="init-num">4</div>
+          <div class="init-body">
+            <strong>Push/SMS продавцу сразу после заказа + таймер «до дедлайна отгрузки»</strong>
+            <p>Сейчас продавцы могут пропустить email или проверить ЛК только утром. Мгновенный push + таймер в интерфейсе («осталось 3 ч 20 мин») создают urgency без штрафов.</p>
+            <p class="why">Блок 1. Дешёвая доработка с прямым влиянием на скорость реакции продавца.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">48</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier2">
+          <div class="init-num">5</div>
+          <div class="init-body">
+            <strong>Интеграция экспресс-тарифов (доставка сегодня/завтра)</strong>
+            <p>Яндекс.Доставка уже предлагает курьера «за 2 часа». Включить как отдельную опцию на checkout для городов с покрытием. Показывать продавцу, сколько заказов упускает из-за её отсутствия.</p>
+            <p class="why">Блок 2. Высокий потенциал в городах-миллионниках, но требует доработки со стороны Яндекса и продавцов.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">42</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier3">
+          <div class="init-num">6</div>
+          <div class="init-body">
+            <strong>Партнёрство с региональными перевозчиками</strong>
+            <p>Добавить Boxberry, DPD, PickPoint для регионов с плохим покрытием Яндекса и СДЭК. Сократит сроки за счёт локальных хабов.</p>
+            <p class="why">Блок 2+4. Долгосрочная инициатива, требует переговоров и интеграций. Даёт эффект в «дальних» регионах.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">24</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q2 -->
+    <div class="q-block">
+      <div class="q-label">Вопрос 02</div>
+      <div class="q-text">Как бы ты приоритизировал эти инициативы?</div>
+
+      <p style="font-size:13px;color:#555;margin-bottom:8px;">
+        Принцип: сначала атакуем блок с продавцом (Tier 1 → быстро и дёшево), потом оптимизируем транзит (сложнее, но масштабнее).
+      </p>
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#333;">
+        <strong style="display:block;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:0.6px;color:#0369a1;">Путь к 2 дням</strong>
+        Текущие 6 дней раскладываются так: ~2–3 дня — задержка на стороне продавца (обработка/упаковка), ~2–3 дня — транзит перевозчика, ~0.5–1 день — прочее.<br><br>
+        Инициативы 1+4 (SLA + push/таймер) нацелены на блок продавца → <strong>−2 дня</strong>.<br>
+        Инициатива 3 (умная маршрутизация) нацелена на транзит → <strong>−1–2 дня</strong>.<br>
+        Инициатива 2 (точная дата) создаёт системное давление на оба блока через ответственность.<br><br>
+        <strong>Итого: реалистичный горизонт выхода на 2–3 дня — 2 квартала при последовательном внедрении Tier 1.</strong>
+      </div>
+
+      <table class="ptable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Инициатива</th>
+            <th>Impact</th>
+            <th>Confidence</th>
+            <th>Ease</th>
+            <th>ICE</th>
+            <th>Трек</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>SLA для продавцов</td>
+            <td>9</td><td>8</td><td>8</td>
+            <td><strong>72</strong></td>
+            <td><span class="badge h">Q1</span></td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>Точная дата доставки</td>
+            <td>9</td><td>7</td><td>7</td>
+            <td><strong>63</strong></td>
+            <td><span class="badge h">Q1</span></td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>Умная маршрутизация</td>
+            <td>8</td><td>7</td><td>6</td>
+            <td><strong>56</strong></td>
+            <td><span class="badge h">Q1–Q2</span></td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>Push + таймер отгрузки</td>
+            <td>6</td><td>8</td><td>8</td>
+            <td><strong>48</strong></td>
+            <td><span class="badge m">Q1</span></td>
+          </tr>
+          <tr>
+            <td><strong>5</strong></td>
+            <td>Экспресс-тарифы</td>
+            <td>7</td><td>6</td><td>6</td>
+            <td><strong>42</strong></td>
+            <td><span class="badge m">Q2</span></td>
+          </tr>
+          <tr>
+            <td><strong>6</strong></td>
+            <td>Региональные перевозчики</td>
+            <td>6</td><td>4</td><td>3</td>
+            <td><strong>24</strong></td>
+            <td><span class="badge l">Q3+</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q3 -->
+    <div class="q-block">
+      <div class="q-label">Вопрос 03</div>
+      <div class="q-text">Какие данные и метрики ты бы дополнительно собрал?</div>
+
+      <p style="font-size:13px;color:#555;margin-bottom:14px;">
+        Сначала нужно <strong>разбить 6 дней на этапы</strong> — без этого непонятно, что лечить. Затем — понять влияние скорости на бизнес-метрики.
+      </p>
+
+      <div class="metrics-grid">
+
+        <div class="metric-row">
+          <div class="metric-icon">🔍</div>
+          <div class="metric-body">
+            <strong>Breakdown времени по этапам (приоритет №1)</strong>
+            <span>Время «заказ → передача курьеру» vs. «забор → доставка». Пока нет этих данных — все инициативы под вопросом. Возможно, проблема только у продавцов, а перевозчики укладываются в 2 дня.</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-icon">📉</div>
+          <div class="metric-body">
+            <strong>Конверсия в заказ в зависимости от срока доставки на checkout</strong>
+            <span>Показывает ли срок 4, 5, 6, 7+ дней разную конверсию? Это докажет или опровергнет, что 6 дней — причина отказов, а не следствие других факторов.</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-icon">⚡</div>
+          <div class="metric-body">
+            <strong>Распределение продавцов по скорости обработки</strong>
+            <span>Сколько % продавцов отгружают за 4 / 8 / 24 / 48+ ч? Если 20% продавцов дают 80% задержек — фокусируемся на них.</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-icon">🗺</div>
+          <div class="metric-body">
+            <strong>Тепловая карта: скорость доставки по регионам</strong>
+            <span>Где самые долгие маршруты? Это определит, нужны ли региональные перевозчики или проблема повсеместная.</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-icon">📊</div>
+          <div class="metric-body">
+            <strong>Повторные заказы в зависимости от скорости доставки</strong>
+            <span>Retention: покупатели, получившие заказ за 2 дня, возвращаются чаще, чем за 6 дней? Это монетизирует проблему для продавцов.</span>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-icon">💬</div>
+          <div class="metric-body">
+            <strong>Качественный ресёрч: глубинные интервью с покупателями</strong>
+            <span>Поговорить с 10–15 покупателями, которые не завершили заказ. Подтвердить, что именно срок доставки — причина отказа, а не цена или UX.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════ КЕЙС 02 ══════════════════════════ -->
+  <div class="case" id="case02">
+    <div class="case-header">
+      <span class="case-num">КЕЙС 02</span>
+      <span class="case-title">Конверсия checkout: 26% → 50%+</span>
+    </div>
+
+    <div class="case-problem">
+      Последний этап воронки (checkout): доставка + оплата + промокод + оформление.
+      Текущая конверсия — <strong>26%</strong>, baseline — <strong>34%</strong>, целевая — <strong>50%+</strong>.
+      Пример магазина на платформе: bazioni.ru (мужская одежда премиум-сегмента).
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-block">
+      <div class="q-label">Вопрос 01</div>
+      <div class="q-text">Какие инициативы ты бы предложил для увеличения конверсии до 50% и выше?</div>
+
+      <!-- Clarifying questions -->
+      <div class="clarify-box">
+        <div class="heading">Уточняющие вопросы</div>
+        <ul>
+          <li>34% baseline — это индустриальный бенчмарк, конкурент или исторический показатель магазина?</li>
+          <li>Какой split mobile / desktop? (у мобильных обычно конверсия на 30–40% ниже)</li>
+          <li>Новые vs. возвращающиеся покупатели — где разрыв больше?</li>
+          <li>На каком конкретном шаге checkout самый высокий drop-off?</li>
+          <li>Сколько шагов сейчас в checkout? Есть ли обязательная регистрация?</li>
+        </ul>
+      </div>
+
+      <!-- Opportunity quantification -->
+      <div class="opportunity">
+        <div class="ohead">Масштаб возможности</div>
+        <p>При <strong>1 000 визитах на checkout в месяц</strong> и среднем чеке <strong>30 000 ₽</strong>:</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+          <div style="text-align:center;background:#fff;border-radius:8px;padding:12px;border:1px solid #bbf7d0;">
+            <div style="font-size:22px;font-weight:800;color:#111">26%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">Сейчас</div>
+            <div style="font-size:13px;color:#555;margin-top:4px">260 заказов / мес<br>= 7,8 млн ₽</div>
+          </div>
+          <div style="text-align:center;background:#fff;border-radius:8px;padding:12px;border:1px solid #bbf7d0;">
+            <div style="font-size:22px;font-weight:800;color:#f59e0b">34%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">Baseline</div>
+            <div style="font-size:13px;color:#555;margin-top:4px">340 заказов / мес<br>= 10,2 млн ₽</div>
+          </div>
+          <div style="text-align:center;background:#fff;border-radius:8px;padding:12px;border:1px solid #bbf7d0;">
+            <div style="font-size:22px;font-weight:800;color:#16a34a">50%</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">Цель</div>
+            <div style="font-size:13px;color:#555;margin-top:4px">500 заказов / мес<br>= 15 млн ₽</div>
+          </div>
+        </div>
+        <p style="font-size:12px;color:#777;margin-top:10px;">→ Рост с 26% до 50% = <strong>+92% GMV</strong> без привлечения нового трафика. Это самый дешёвый способ роста.</p>
+      </div>
+
+      <!-- Observations from bazioni.ru -->
+      <div class="obs-box">
+        <div class="obs-head">Наблюдения по bazioni.ru (реальный магазин на платформе)</div>
+
+        <div class="obs-item">
+          <span class="obs-tag good">+</span>
+          <span class="obs-text"><strong>Сплит (рассрочка) уже подключён</strong> — видно на странице корзины. Хорошая практика для чека 30–50 тыс. ₽. Инициировать повторно нет смысла.</span>
+        </div>
+        <div class="obs-item">
+          <span class="obs-tag good">+</span>
+          <span class="obs-text"><strong>Бесплатная доставка от 7 000 ₽ в ПВЗ Яндекс Маркета</strong> — видна в корзине, не является сюрпризом на checkout. Правильно.</span>
+        </div>
+        <div class="obs-item">
+          <span class="obs-tag good">+</span>
+          <span class="obs-text"><strong>Примерка при получении</strong> — мощный trust-сигнал для одежды. Но на checkout, скорее всего, не акцентирован.</span>
+        </div>
+        <div class="obs-item">
+          <span class="obs-tag bad">−</span>
+          <span class="obs-text"><strong>Нет guest checkout</strong> — типичная проблема e-com на CMS: требуется регистрация или авторизация. Для нового покупателя это барьер.</span>
+        </div>
+        <div class="obs-item">
+          <span class="obs-tag bad">−</span>
+          <span class="obs-text"><strong>Высокий ценовой сегмент + онлайн-покупка</strong> — покупатель нуждается в дополнительных сигналах доверия (гарантии, возврат, безопасность оплаты). Если их нет на checkout — высокий риск отказа.</span>
+        </div>
+        <div class="obs-item">
+          <span class="obs-tag neutral">→</span>
+          <span class="obs-text"><strong>Поле промокода</strong> — с высокой вероятностью открытое. Для премиум-аудитории это может быть менее критично (промокоды ищут меньше), но проверить стоит.</span>
+        </div>
+      </div>
+
+      <!-- Initiatives -->
+      <div class="initiatives">
+
+        <div class="init-card tier1">
+          <div class="init-num">1</div>
+          <div class="init-body">
+            <strong>Скрыть поле промокода за ссылку «Есть промокод?»</strong>
+            <p>Видимое поле триггерит покупателей искать скидку в интернете — они уходят и не возвращаются. Скрытое поле устраняет этот триггер для тех, у кого кода нет.</p>
+            <p class="why">Работает из коробки — один день разработки. Подтверждено Shopify, Magento, десятками кейсов e-com.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">80</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier1">
+          <div class="init-num">2</div>
+          <div class="init-body">
+            <strong>Гостевой checkout (без обязательной регистрации)</strong>
+            <p>Новый покупатель не хочет создавать аккаунт ради первой покупки. Дать возможность оформить по email + телефон. Предложить сохранить пароль после оплаты — так retention не пострадает.</p>
+            <p class="why">По данным Baymard Institute, обязательная регистрация — причина отказа №1 на checkout (24% брошенных корзин). Особенно критично для премиум-аудитории, которая ценит скорость.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">72</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier1">
+          <div class="init-num">3</div>
+          <div class="init-body">
+            <strong>Прозрачность итоговой суммы: без сюрпризов на последнем шаге</strong>
+            <p>«Стоимость корзины + доставка + итого» должны быть видны постоянно, а не только в конце. Если стоимость доставки появляется только на шаге оплаты — это причина отказа.</p>
+            <p class="why">Unexpected shipping costs — причина отказа №1 по Baymard (49% брошенных корзин). В bazioni.ru доставка частично анонсирована в корзине, но на checkout нужно подтвердить.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">63</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier2">
+          <div class="init-num">4</div>
+          <div class="init-body">
+            <strong>Прогресс-бар + сокращение числа шагов</strong>
+            <p>Чёткий индикатор «Шаг 2 из 3» снижает тревогу «а сколько ещё?». Объединить доставку и оплату в один экран, если возможно.</p>
+            <p class="why">Ощущение близости к финишу мотивирует его достичь. Особенно важно на мобильных, где форма выглядит бесконечной.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">48</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier2">
+          <div class="init-num">5</div>
+          <div class="init-body">
+            <strong>Trust-блок на checkout: возврат, безопасность, физический магазин</strong>
+            <p>Рядом с кнопкой «Оформить заказ»: иконка защищённой оплаты, «30 дней на возврат», «Примерка при получении», адрес физического магазина (это уникальное преимущество bazioni.ru).</p>
+            <p class="why">Покупатель, тратящий 40–50 тыс. ₽ онлайн, на последнем шаге испытывает максимальную тревогу. Trust-сигналы в правильном месте снижают её.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">45</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier2">
+          <div class="init-num">6</div>
+          <div class="init-body">
+            <strong>Автозаполнение адреса (DaData / КЛАДР) + сохранение данных</strong>
+            <p>Для повторных покупателей — предзаполненные поля. Для новых — интеллектуальный ввод адреса с подсказками. Убирает один из самых раздражающих шагов.</p>
+            <p class="why">Каждое лишнее поле снижает конверсию. Ввод адреса вручную на мобильном — критичный барьер.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">40</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+        <div class="init-card tier3">
+          <div class="init-num">7</div>
+          <div class="init-body">
+            <strong>Exit-intent: оффер для уходящего покупателя</strong>
+            <p>При попытке закрыть страницу — предложить небольшую скидку или бесплатную доставку. Возвращает часть пользователей, которые уже решили уйти.</p>
+            <p class="why">Работает, но может раздражать. Для премиум-сегмента использовать осторожно — скидка снижает воспринимаемую ценность товара.</p>
+          </div>
+          <div class="ice-score">
+            <div class="score-val">21</div>
+            <div class="score-label">ICE</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q2 -->
+    <div class="q-block">
+      <div class="q-label">Вопрос 02</div>
+      <div class="q-text">Как бы ты приоритизировал эти инициативы?</div>
+
+      <p style="font-size:13px;color:#555;margin-bottom:14px;">
+        Стратегия: сначала снимаем «запрещённые плоды» (поле промокода, регистрация), потом строим доверие и снижаем трение формы.
+      </p>
+
+      <table class="ptable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Инициатива</th>
+            <th>I</th><th>C</th><th>E</th>
+            <th>ICE</th>
+            <th>Усилие</th>
+            <th>Спринт</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Скрыть поле промокода</td>
+            <td>8</td><td>10</td><td>10</td>
+            <td><strong>80</strong></td>
+            <td>1 день</td>
+            <td><span class="badge h">S1</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Гостевой checkout</td>
+            <td>9</td><td>8</td><td>8</td>
+            <td><strong>72</strong></td>
+            <td>1–2 нед</td>
+            <td><span class="badge h">S1</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Прозрачность суммы</td>
+            <td>9</td><td>7</td><td>7</td>
+            <td><strong>63</strong></td>
+            <td>3–5 дней</td>
+            <td><span class="badge h">S1</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Прогресс-бар + сокращение шагов</td>
+            <td>6</td><td>8</td><td>8</td>
+            <td><strong>48</strong></td>
+            <td>3–5 дней</td>
+            <td><span class="badge m">S2</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Trust-блок на checkout</td>
+            <td>6</td><td>7</td><td>9</td>
+            <td><strong>45</strong></td>
+            <td>2–3 дня</td>
+            <td><span class="badge m">S2</span></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Автозаполнение адреса</td>
+            <td>5</td><td>8</td><td>7</td>
+            <td><strong>40</strong></td>
+            <td>1 нед</td>
+            <td><span class="badge m">S2</span></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Exit-intent оффер</td>
+            <td>3</td><td>7</td><td>7</td>
+            <td><strong>21</strong></td>
+            <td>3–5 дней</td>
+            <td><span class="badge l">S3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Q3 -->
+    <div class="q-block">
+      <div class="q-label">Вопрос 03</div>
+      <div class="q-text">Как бы ты протестировал идею? Выбери 1–2 инициативы и объясни.</div>
+
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#555;">
+        <strong style="display:block;margin-bottom:4px;color:#111;">Почему именно эти два теста?</strong>
+        Промокод — изменение за 1 день с доказанным эффектом, идеальный быстрый старт. Trust-блок — чисто визуальное изменение (1–2 дня разработки), критичное для премиум-аудитории с чеком 40–50 тыс. ₽.<br><br>
+        <em>Гостевой checkout (инициатива №2) — сильнейшая по потенциалу, но требует 1–2 недели разработки. Она идёт следующей, после валидации быстрых тестов.</em>
+      </div>
+
+      <div class="test-card">
+        <div class="thead">Тест 1 · Скрытие поля промокода</div>
+
+        <div class="trow">
+          <div class="tkey">Гипотеза</div>
+          <div class="tval">Видимое поле промокода провоцирует покупателей покидать checkout в поиске кода. Скрытие за ссылку снизит отток и повысит конверсию в оформление на ≥ 3 п.п.</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Механика</div>
+          <div class="tval">A/B тест: 50% трафика видят поле промокода всегда (контроль), 50% — только ссылку «Есть промокод?» (вариант).</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Аудитория</div>
+          <div class="tval">Новые пользователи (у повторных уже есть данные, они менее чувствительны). Сегментация по устройствам — мобильные и десктоп отдельно.</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Длительность</div>
+          <div class="tval">2–3 недели. До достижения статистической значимости (p &lt; 0.05, минимум 500 конверсий в каждой группе).</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Primary метрика</div>
+          <div class="tval">Конверсия checkout → оформленный заказ.</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Secondary метрики</div>
+          <div class="tval">Bounce rate с checkout; % покупателей, использовавших промокод; средний чек.</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Критерий победы</div>
+          <div class="tval">Конверсия в варианте выше на ≥ 2 п.п. при сохранении или росте среднего чека.</div>
+        </div>
+
+        <div class="risk-box">
+          ⚠ Риск: использование промокодов может упасть — это допустимо, но нужно проверить, что GMV не снизился. Если конверсия выросла, а промокодов применили меньше — это чистый плюс для бизнеса.
+        </div>
+      </div>
+
+      <div class="test-card">
+        <div class="thead">Тест 2 · Trust-блок на checkout (быстро и дёшево)</div>
+
+        <div class="trow">
+          <div class="tkey">Гипотеза</div>
+          <div class="tval">Покупатель, оформляющий заказ на 40–50 тыс. ₽ онлайн, испытывает максимальную тревогу на последнем шаге. Добавление trust-сигналов рядом с кнопкой «Оформить» снизит отток.</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Механика</div>
+          <div class="tval">A/B тест: контроль — текущая страница. Вариант — добавлен блок «Защита покупки»: иконка безопасной оплаты, «Возврат в течение 30 дней», «Примерка при получении», «Официальный магазин в Москве».</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Почему этот тест</div>
+          <div class="tval">Изменение только визуальное — реализация за 1–2 дня. Высокий потенциал для премиум-аудитории, где доверие критично. Легко воспроизвести для других продавцов на платформе.</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Primary метрика</div>
+          <div class="tval">Конверсия на последнем шаге (шаг подтверждения → оформленный заказ).</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Secondary метрики</div>
+          <div class="tval">Процент возвратов (проверяем, что не привлекаем «ненужных» покупателей), NPS после получения.</div>
+        </div>
+        <div class="trow">
+          <div class="tkey">Критерий победы</div>
+          <div class="tval">Конверсия последнего шага выше на ≥ 2 п.п., процент возвратов не вырос.</div>
+        </div>
+
+        <div class="risk-box">
+          ⚠ Если тест не даёт эффекта — это тоже ценный сигнал: проблема не в доверии, а в другом. Переходим к тестированию гостевого checkout.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════ МАКЕТЫ CHECKOUT ══════════════════════════ -->
+  <div class="case" id="mockups">
+    <div class="case-header">
+      <span class="case-num">МАКЕТЫ</span>
+      <span class="case-title">Checkout: текущий vs. улучшенный</span>
+    </div>
+    <div class="case-problem">
+      Визуальное сравнение ключевых изменений. Левый экран — текущее состояние (проблемы отмечены красным). Правый — предлагаемый дизайн.
+    </div>
+
+    <!-- ── Секция 1: Мобильный вид ── -->
+    <div class="mock-section-title">Мобильный checkout (основной трафик)</div>
+
+    <div class="mock-compare">
+
+      <!-- BEFORE -->
+      <div class="mock-col">
+        <div class="mock-label before">Текущий</div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+
+            <!-- header -->
+            <div class="m-header">
+              <div class="m-logo">BAZIONI</div>
+              <div class="m-nav-links">
+                <span>Каталог</span>
+                <span>Акции</span>
+                <span>Избранное</span>
+                <span>Профиль</span>
+              </div>
+            </div>
+
+            <!-- no progress -->
+            <div class="m-issue-flag">✗ Нет индикатора прогресса</div>
+
+            <div class="m-section-title">Оформление заказа</div>
+
+            <!-- forced auth -->
+            <div class="m-issue-block">
+              <div class="m-issue-flag">✗ Обязательная регистрация</div>
+              <div class="m-field-group" style="margin-top:6px">
+                <div class="m-field-label">Email</div>
+                <div class="m-field"></div>
+                <div class="m-field-label" style="margin-top:6px">Пароль</div>
+                <div class="m-field"></div>
+                <div class="m-btn-outline" style="margin-top:8px">Войти</div>
+                <div style="font-size:9px;color:#999;text-align:center;margin-top:4px">Нет аккаунта? Зарегистрироваться</div>
+              </div>
+            </div>
+
+            <div class="m-field-label" style="margin-top:10px">Способ доставки</div>
+            <div class="m-radio-row selected">
+              <div class="m-radio-dot"></div>
+              <div><div style="font-size:10px;font-weight:600">Курьер</div><div style="font-size:9px;color:#888">3–7 рабочих дней</div></div>
+              <div style="font-size:10px;font-weight:600;margin-left:auto">490 ₽</div>
+            </div>
+            <div class="m-radio-row">
+              <div class="m-radio-dot empty"></div>
+              <div><div style="font-size:10px;font-weight:600">ПВЗ</div><div style="font-size:9px;color:#888">3–7 рабочих дней</div></div>
+              <div style="font-size:10px;font-weight:600;margin-left:auto">0 ₽</div>
+            </div>
+
+            <!-- promo visible -->
+            <div class="m-issue-block" style="margin-top:10px">
+              <div class="m-issue-flag">✗ Поле промокода всегда открыто</div>
+              <div class="m-field-label" style="margin-top:6px">Промокод</div>
+              <div style="display:flex;gap:4px;margin-top:4px">
+                <div class="m-field" style="flex:1"></div>
+                <div class="m-btn-sm">Применить</div>
+              </div>
+            </div>
+
+            <!-- total hidden -->
+            <div class="m-issue-block" style="margin-top:10px">
+              <div class="m-issue-flag">✗ Итог не виден до конца</div>
+              <div class="m-total-row" style="opacity:.4">Итого: ???</div>
+            </div>
+
+            <!-- no trust -->
+            <div class="m-issue-flag" style="margin-top:8px">✗ Нет сигналов доверия</div>
+
+            <div class="m-btn-primary" style="margin-top:12px;background:#ccc;color:#888">Оформить заказ</div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="mock-col">
+        <div class="mock-label after">Улучшенный</div>
+        <div class="phone-frame good">
+          <div class="phone-screen">
+
+            <!-- minimal header -->
+            <div class="m-header minimal">
+              <div class="m-logo">BAZIONI</div>
+            </div>
+
+            <!-- progress bar -->
+            <div class="m-progress">
+              <div class="m-progress-step done">✓</div>
+              <div class="m-progress-line done"></div>
+              <div class="m-progress-step active">2</div>
+              <div class="m-progress-line"></div>
+              <div class="m-progress-step">3</div>
+            </div>
+            <div class="m-progress-labels">
+              <span>Контакты</span>
+              <span style="font-weight:700;color:#111">Доставка</span>
+              <span>Оплата</span>
+            </div>
+
+            <!-- guest checkout -->
+            <div class="m-good-block">
+              <div class="m-good-flag">✓ Гостевой checkout</div>
+              <div class="m-field-group" style="margin-top:6px">
+                <div class="m-field-label">Телефон или email</div>
+                <div class="m-field">+7 (___) ___-__-__</div>
+                <div style="font-size:9px;color:#888;margin-top:4px;text-align:center">Аккаунт создадим автоматически после заказа</div>
+              </div>
+            </div>
+
+            <!-- delivery -->
+            <div class="m-field-label" style="margin-top:10px">Способ доставки</div>
+            <div class="m-radio-row selected good-border">
+              <div class="m-radio-dot green"></div>
+              <div>
+                <div style="font-size:10px;font-weight:600">ПВЗ Яндекс Маркета</div>
+                <div style="font-size:9px;color:#22c55e;font-weight:600">Доставим 10 апреля · бесплатно</div>
+              </div>
+              <div style="font-size:10px;font-weight:700;color:#22c55e;margin-left:auto">0 ₽</div>
+            </div>
+            <div class="m-radio-row">
+              <div class="m-radio-dot empty"></div>
+              <div>
+                <div style="font-size:10px;font-weight:600">Курьер до двери</div>
+                <div style="font-size:9px;color:#888">Доставим 11 апреля</div>
+              </div>
+              <div style="font-size:10px;font-weight:600;margin-left:auto">490 ₽</div>
+            </div>
+
+            <!-- promo hidden -->
+            <div class="m-good-block" style="margin-top:8px">
+              <div class="m-good-flag">✓ Промокод скрыт</div>
+              <div style="font-size:10px;color:#2563eb;text-decoration:underline;margin-top:4px;cursor:pointer">Есть промокод?</div>
+            </div>
+
+            <!-- sticky total -->
+            <div class="m-good-block" style="margin-top:8px">
+              <div class="m-good-flag">✓ Итог всегда виден</div>
+              <div class="m-total-box">
+                <div class="m-total-row-line"><span>Товары (1)</span><span>48 990 ₽</span></div>
+                <div class="m-total-row-line"><span>Доставка</span><span style="color:#22c55e">бесплатно</span></div>
+                <div class="m-total-row-line" style="font-weight:700;border-top:1px solid #eee;padding-top:4px;margin-top:4px"><span>Итого</span><span>48 990 ₽</span></div>
+              </div>
+            </div>
+
+            <!-- trust -->
+            <div class="m-trust-row">
+              <div class="m-trust-item">🔒<br><span>Безопасная<br>оплата</span></div>
+              <div class="m-trust-item">↩️<br><span>Возврат<br>30 дней</span></div>
+              <div class="m-trust-item">👔<br><span>Примерка<br>при получении</span></div>
+            </div>
+
+            <div class="m-btn-primary" style="margin-top:10px">Продолжить →</div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Секция 2: Финальный шаг оплаты ── -->
+    <div class="mock-section-title" style="margin-top:48px">Финальный шаг: подтверждение заказа</div>
+
+    <div class="mock-compare">
+
+      <!-- BEFORE -->
+      <div class="mock-col">
+        <div class="mock-label before">Текущий</div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+
+            <div class="m-section-title">Оплата</div>
+
+            <div class="m-field-label">Способ оплаты</div>
+            <div class="m-radio-row selected">
+              <div class="m-radio-dot"></div>
+              <div style="font-size:10px;font-weight:600">Банковская карта</div>
+            </div>
+            <div class="m-radio-row">
+              <div class="m-radio-dot empty"></div>
+              <div style="font-size:10px;font-weight:600">Наличными при получении</div>
+            </div>
+
+            <div class="m-field-group" style="margin-top:8px">
+              <div class="m-field-label">Номер карты</div>
+              <div class="m-field">0000 0000 0000 0000</div>
+              <div style="display:flex;gap:6px;margin-top:4px">
+                <div style="flex:1">
+                  <div class="m-field-label">Срок</div>
+                  <div class="m-field">MM/YY</div>
+                </div>
+                <div style="flex:1">
+                  <div class="m-field-label">CVV</div>
+                  <div class="m-field">•••</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="m-issue-block" style="margin-top:8px">
+              <div class="m-issue-flag">✗ Нет сигналов доверия перед оплатой</div>
+              <div style="height:20px"></div>
+            </div>
+
+            <div class="m-issue-block" style="margin-top:8px">
+              <div class="m-issue-flag">✗ Нет итоговой суммы рядом с кнопкой</div>
+            </div>
+
+            <div class="m-btn-primary" style="margin-top:14px;background:#ccc;color:#888">Оплатить</div>
+
+            <div class="m-issue-flag" style="margin-top:8px">✗ Нет альтернативных способов оплаты</div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="mock-col">
+        <div class="mock-label after">Улучшенный</div>
+        <div class="phone-frame good">
+          <div class="phone-screen">
+
+            <div class="m-progress">
+              <div class="m-progress-step done">✓</div>
+              <div class="m-progress-line done"></div>
+              <div class="m-progress-step done">✓</div>
+              <div class="m-progress-line done"></div>
+              <div class="m-progress-step active">3</div>
+            </div>
+            <div class="m-progress-labels">
+              <span>Контакты</span>
+              <span>Доставка</span>
+              <span style="font-weight:700;color:#111">Оплата</span>
+            </div>
+
+            <div class="m-field-label" style="margin-top:10px">Способ оплаты</div>
+
+            <div class="m-radio-row selected good-border">
+              <div class="m-radio-dot green"></div>
+              <div style="font-size:10px;font-weight:600">Банковская карта</div>
+              <div style="margin-left:auto;display:flex;gap:4px">
+                <div class="m-pay-icon">VISA</div>
+                <div class="m-pay-icon">MC</div>
+                <div class="m-pay-icon">МИР</div>
+              </div>
+            </div>
+            <div class="m-radio-row">
+              <div class="m-radio-dot empty"></div>
+              <div style="font-size:10px;font-weight:600">СБП</div>
+              <div style="font-size:9px;color:#22c55e;margin-left:auto;font-weight:600">Мгновенно</div>
+            </div>
+            <div class="m-radio-row">
+              <div class="m-radio-dot empty"></div>
+              <div>
+                <div style="font-size:10px;font-weight:600">Сплит</div>
+                <div style="font-size:9px;color:#888">4 платежа по 12 248 ₽</div>
+              </div>
+            </div>
+
+            <div class="m-field-group" style="margin-top:8px">
+              <div class="m-field-label">Номер карты</div>
+              <div class="m-field">0000 0000 0000 0000</div>
+              <div style="display:flex;gap:6px;margin-top:4px">
+                <div style="flex:1">
+                  <div class="m-field-label">Срок</div>
+                  <div class="m-field">MM/YY</div>
+                </div>
+                <div style="flex:1">
+                  <div class="m-field-label">CVV</div>
+                  <div class="m-field">•••</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- order summary -->
+            <div class="m-good-block" style="margin-top:8px">
+              <div class="m-good-flag">✓ Итог перед оплатой</div>
+              <div class="m-total-box">
+                <div class="m-total-row-line"><span>Куртка замша</span><span>48 990 ₽</span></div>
+                <div class="m-total-row-line"><span>Доставка</span><span style="color:#22c55e">0 ₽</span></div>
+                <div class="m-total-row-line" style="font-weight:700;border-top:1px solid #eee;padding-top:4px;margin-top:4px"><span>К оплате</span><span>48 990 ₽</span></div>
+              </div>
+            </div>
+
+            <div class="m-btn-primary" style="margin-top:10px">Оплатить 48 990 ₽</div>
+
+            <!-- trust under button -->
+            <div class="m-good-block" style="margin-top:8px">
+              <div class="m-good-flag">✓ Доверие рядом с кнопкой</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:4px;font-size:9px;color:#555">
+                <span>🔒</span><span>Защищено SSL · Официальный магазин · Возврат 30 дней</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Секция 3: Десктоп ── -->
+    <div class="mock-section-title" style="margin-top:48px">Десктоп checkout (двухколоночный layout)</div>
+
+    <!-- BEFORE desktop -->
+    <div class="mock-label before" style="margin-bottom:14px">Текущий</div>
+    <div class="desktop-frame bad-frame">
+      <!-- browser bar -->
+      <div class="db-browser-bar">
+        <div class="db-dots"><span></span><span></span><span></span></div>
+        <div class="db-url">bazioni.ru/checkout</div>
+        <div style="width:48px"></div>
+      </div>
+      <div class="db-screen">
+
+        <!-- full header — problem -->
+        <div class="db-header bad-header">
+          <div class="db-logo">BAZIONI</div>
+          <nav class="db-nav">
+            <span>Каталог</span><span>Коллекции</span><span>Акции</span>
+            <span>Ателье</span><span>Программа лояльности</span><span>Подарочная карта</span>
+          </nav>
+          <div class="db-header-icons"><span>🔍</span><span>♡</span><span>🛒</span><span>👤</span></div>
+        </div>
+        <div class="db-issue-tag" style="margin:0 24px 0">✗ Полная навигация отвлекает от оформления</div>
+
+        <div class="db-body">
+
+          <!-- left col -->
+          <div class="db-left">
+            <div class="db-step-title">Оформление заказа</div>
+            <div class="db-issue-tag">✗ Нет прогресс-бара, непонятно сколько шагов</div>
+
+            <!-- auth block -->
+            <div class="db-block bad-block" style="margin-top:10px">
+              <div class="db-issue-tag">✗ Требуется вход в аккаунт</div>
+              <div class="db-two-col" style="margin-top:8px">
+                <div>
+                  <div class="db-label">Email</div>
+                  <div class="db-field"></div>
+                </div>
+                <div>
+                  <div class="db-label">Пароль</div>
+                  <div class="db-field"></div>
+                </div>
+              </div>
+              <div class="db-btn-sm bad-btn" style="margin-top:8px;width:120px">Войти</div>
+              <div style="font-size:9px;color:#aaa;margin-top:4px">Нет аккаунта? <u>Зарегистрироваться</u></div>
+            </div>
+
+            <!-- delivery -->
+            <div style="margin-top:14px">
+              <div class="db-block-title">Доставка</div>
+              <div class="db-radio bad-block">
+                <div class="db-radio-dot filled"></div>
+                <div>
+                  <div class="db-field-val">Курьер до двери</div>
+                  <div style="font-size:9px;color:#aaa">3–7 рабочих дней · 490 ₽</div>
+                  <div class="db-issue-tag" style="margin-top:3px">✗ Диапазон вместо конкретной даты</div>
+                </div>
+              </div>
+              <div class="db-radio" style="margin-top:4px">
+                <div class="db-radio-dot"></div>
+                <div>
+                  <div class="db-field-val">ПВЗ Яндекс Маркет</div>
+                  <div style="font-size:9px;color:#aaa">3–7 рабочих дней · бесплатно</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- promo visible -->
+            <div class="db-block bad-block" style="margin-top:14px">
+              <div class="db-issue-tag">✗ Промокод всегда открыт — покупатель уходит искать</div>
+              <div class="db-label" style="margin-top:6px">Промокод</div>
+              <div style="display:flex;gap:8px;margin-top:4px">
+                <div class="db-field" style="flex:1"></div>
+                <div class="db-btn-sm bad-btn">Применить</div>
+              </div>
+            </div>
+
+            <!-- payment -->
+            <div style="margin-top:14px">
+              <div class="db-block-title">Оплата</div>
+              <div class="db-radio bad-block">
+                <div class="db-radio-dot filled"></div>
+                <div style="flex:1">
+                  <div class="db-field-val">Банковская карта</div>
+                  <div class="db-two-col" style="margin-top:6px">
+                    <div>
+                      <div class="db-label">Номер карты</div>
+                      <div class="db-field">0000 0000 0000 0000</div>
+                    </div>
+                    <div style="display:flex;gap:6px">
+                      <div style="flex:1"><div class="db-label">Срок</div><div class="db-field">MM/YY</div></div>
+                      <div style="flex:1"><div class="db-label">CVV</div><div class="db-field">•••</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="db-issue-tag" style="margin-top:8px">✗ Только карта и наличные — нет СБП, нет Сплита</div>
+
+            <div class="db-btn-primary bad-btn-primary" style="margin-top:16px">Оформить заказ</div>
+            <div class="db-issue-tag" style="margin-top:8px">✗ Нет trust-сигналов рядом с кнопкой</div>
+          </div>
+
+          <!-- right col — order summary -->
+          <div class="db-right">
+            <div class="db-block-title">Ваш заказ</div>
+            <div class="db-order-item">
+              <div class="db-order-thumb"></div>
+              <div>
+                <div style="font-size:10px;font-weight:600">Куртка из козьей замши</div>
+                <div style="font-size:9px;color:#aaa">Размер L · Чёрный</div>
+              </div>
+              <div style="margin-left:auto;font-size:11px;font-weight:700">48 990 ₽</div>
+            </div>
+            <div class="db-divider"></div>
+            <div class="db-total-line"><span>Товары</span><span>48 990 ₽</span></div>
+            <div class="db-total-line"><span>Доставка</span><span class="db-issue-tag" style="font-size:8px">✗ Считается...</span></div>
+            <div class="db-divider"></div>
+            <div class="db-total-line bold"><span>Итого</span><span>???</span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER desktop -->
+    <div class="mock-label after" style="margin-bottom:14px;margin-top:32px">Улучшенный</div>
+    <div class="desktop-frame good-frame">
+      <div class="db-browser-bar">
+        <div class="db-dots"><span></span><span></span><span></span></div>
+        <div class="db-url">bazioni.ru/checkout</div>
+        <div style="width:48px"></div>
+      </div>
+      <div class="db-screen">
+
+        <!-- minimal header -->
+        <div class="db-header good-header">
+          <div class="db-logo">BAZIONI</div>
+          <div class="db-progress-bar">
+            <div class="db-pb-step done">✓ Контакты</div>
+            <div class="db-pb-arrow">›</div>
+            <div class="db-pb-step active">Доставка</div>
+            <div class="db-pb-arrow">›</div>
+            <div class="db-pb-step">Оплата</div>
+          </div>
+          <div style="width:80px;text-align:right;font-size:10px;color:#888">Шаг 2 из 3</div>
+        </div>
+        <div class="db-good-tag" style="margin:0 24px 0">✓ Минимальный header — покупатель сфокусирован на оформлении</div>
+
+        <div class="db-body">
+
+          <!-- left col -->
+          <div class="db-left">
+            <div class="db-step-title">Доставка</div>
+
+            <!-- guest block -->
+            <div class="db-block good-block">
+              <div class="db-good-tag">✓ Гостевой checkout — регистрация не нужна</div>
+              <div class="db-two-col" style="margin-top:8px">
+                <div>
+                  <div class="db-label">Имя</div>
+                  <div class="db-field" style="color:#333">Александр</div>
+                </div>
+                <div>
+                  <div class="db-label">Телефон</div>
+                  <div class="db-field" style="color:#333">+7 (999) 123-45-67</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- delivery with date -->
+            <div style="margin-top:14px">
+              <div class="db-block-title">Способ доставки</div>
+              <div class="db-radio good-block" style="border-color:#22c55e">
+                <div class="db-radio-dot green"></div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between">
+                    <div class="db-field-val">ПВЗ Яндекс Маркета</div>
+                    <div style="font-size:11px;font-weight:700;color:#22c55e">Бесплатно</div>
+                  </div>
+                  <div style="font-size:9px;color:#22c55e;font-weight:600;margin-top:2px">✓ Доставим в четверг, 10 апреля</div>
+                  <div class="db-good-tag" style="margin-top:3px">✓ Точная дата вместо диапазона</div>
+                </div>
+              </div>
+              <div class="db-radio" style="margin-top:4px">
+                <div class="db-radio-dot"></div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between">
+                    <div class="db-field-val">Курьер до двери</div>
+                    <div style="font-size:11px;font-weight:600">490 ₽</div>
+                  </div>
+                  <div style="font-size:9px;color:#888;margin-top:2px">Пятница, 11 апреля · с 10:00 до 22:00</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- address with autocomplete -->
+            <div class="db-block good-block" style="margin-top:14px">
+              <div class="db-good-tag">✓ Автозаполнение адреса (DaData)</div>
+              <div class="db-label" style="margin-top:6px">Адрес доставки</div>
+              <div class="db-field" style="color:#333;margin-top:4px">Москва, ул. Тверская, 12 ▾</div>
+            </div>
+
+            <!-- promo hidden -->
+            <div class="db-block good-block" style="margin-top:14px">
+              <div class="db-good-tag">✓ Промокод скрыт — покупатель не уходит искать</div>
+              <div style="font-size:10px;color:#2563eb;text-decoration:underline;margin-top:6px;cursor:pointer">Есть промокод или сертификат?</div>
+            </div>
+
+            <!-- payment -->
+            <div style="margin-top:14px">
+              <div class="db-block-title">Способ оплаты</div>
+              <div class="db-pay-tabs">
+                <div class="db-pay-tab active">💳 Карта</div>
+                <div class="db-pay-tab">СБП</div>
+                <div class="db-pay-tab">Сплит ×4</div>
+              </div>
+              <div class="db-block good-block" style="margin-top:8px">
+                <div class="db-two-col">
+                  <div>
+                    <div class="db-label">Номер карты</div>
+                    <div class="db-field" style="color:#333">4276 •••• •••• 1234</div>
+                  </div>
+                  <div style="display:flex;gap:6px">
+                    <div style="flex:1"><div class="db-label">Срок</div><div class="db-field">09/27</div></div>
+                    <div style="flex:1"><div class="db-label">CVV</div><div class="db-field">•••</div></div>
+                  </div>
+                </div>
+                <div class="db-good-tag" style="margin-top:6px">✓ Сохранить карту для следующего раза</div>
+              </div>
+            </div>
+
+            <!-- CTA + trust -->
+            <div style="margin-top:20px">
+              <div class="db-btn-primary good-btn-primary">Оплатить 48 990 ₽ →</div>
+              <div class="db-trust-strip">
+                <div class="db-trust-item"><span>🔒</span> SSL-защита</div>
+                <div class="db-trust-item"><span>↩</span> Возврат 30 дней</div>
+                <div class="db-trust-item"><span>👔</span> Примерка при получении</div>
+                <div class="db-trust-item"><span>🏪</span> Официальный магазин, Москва</div>
+              </div>
+              <div class="db-good-tag" style="margin-top:4px">✓ Trust-сигналы прямо под кнопкой оплаты</div>
+            </div>
+
+          </div>
+
+          <!-- right col -->
+          <div class="db-right good-right">
+            <div class="db-block-title">Ваш заказ</div>
+            <div class="db-order-item">
+              <div class="db-order-thumb good-thumb"></div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:600">Куртка из козьей замши</div>
+                <div style="font-size:9px;color:#aaa">Размер L · Чёрный</div>
+              </div>
+              <div style="margin-left:auto;font-size:11px;font-weight:700">48 990 ₽</div>
+            </div>
+            <div class="db-divider"></div>
+            <div class="db-total-line"><span>Товары (1 шт.)</span><span>48 990 ₽</span></div>
+            <div class="db-total-line"><span>Доставка в ПВЗ</span><span style="color:#22c55e;font-weight:700">Бесплатно</span></div>
+            <div class="db-divider"></div>
+            <div class="db-total-line bold"><span>Итого</span><span>48 990 ₽</span></div>
+            <div class="db-good-tag" style="margin-top:6px">✓ Итог всегда виден в правой колонке</div>
+
+            <!-- delivery summary -->
+            <div style="margin-top:12px;background:#f0fdf4;border-radius:8px;padding:10px 12px;border:1px solid #bbf7d0">
+              <div style="font-size:9px;font-weight:700;color:#15803d;margin-bottom:4px">ДОСТАВКА</div>
+              <div style="font-size:10px;color:#333">📦 ПВЗ Яндекс Маркета</div>
+              <div style="font-size:10px;font-weight:700;color:#22c55e;margin-top:2px">Четверг, 10 апреля</div>
+            </div>
+
+            <!-- сплит подсказка -->
+            <div style="margin-top:10px;background:#eff6ff;border-radius:8px;padding:10px 12px;border:1px solid #bfdbfe">
+              <div style="font-size:9px;font-weight:700;color:#1d4ed8;margin-bottom:4px">СПЛИТ</div>
+              <div style="font-size:10px;color:#333">Оплатите 4 части:</div>
+              <div style="font-size:12px;font-weight:800;color:#1d4ed8;margin-top:2px">12 248 ₽ × 4</div>
+              <div style="font-size:9px;color:#888;margin-top:2px">Без переплат и процентов</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Легенда изменений ── -->
+    <div class="mock-section-title" style="margin-top:48px">Сводка изменений</div>
+
+    <div class="changes-grid">
+      <div class="change-card remove">
+        <div class="change-icon">✕</div>
+        <div class="change-body">
+          <strong>Убираем</strong>
+          <ul>
+            <li>Полная навигация на checkout (отвлекает)</li>
+            <li>Открытое поле промокода</li>
+            <li>Обязательную регистрацию</li>
+            <li>Диапазон «3–7 дней» без конкретики</li>
+            <li>Страницу без итоговой суммы</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="change-card add">
+        <div class="change-icon">+</div>
+        <div class="change-body">
+          <strong>Добавляем</strong>
+          <ul>
+            <li>Прогресс-бар «Шаг 2 из 3»</li>
+            <li>Гостевой вход по телефону/email</li>
+            <li>Точную дату доставки «10 апреля»</li>
+            <li>Постоянно видимый итог с разбивкой</li>
+            <li>СБП как способ оплаты</li>
+            <li>Trust-блок: 🔒 SSL · возврат · примерка</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="change-card impact">
+        <div class="change-icon">→</div>
+        <div class="change-body">
+          <strong>Ожидаемый эффект</strong>
+          <ul>
+            <li>Скрытие промокода: +3–5 п.п. конверсии</li>
+            <li>Гостевой checkout: +4–6 п.п.</li>
+            <li>Точная дата доставки: +2–3 п.п.</li>
+            <li>Trust-блок: +2–4 п.п.</li>
+            <li><strong>Спринт 1 (S1): 26% → 37–44%</strong></li>
+            <li>Спринт 2 (S2, +прогресс-бар, trust, автозаполнение): 44% → 50%+</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footnote">KIT Platform · Тестовое задание · v2 · апрель 2026</p>
+
+</div>
+</body>
+</html>
